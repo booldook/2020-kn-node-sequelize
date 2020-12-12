@@ -41,10 +41,6 @@ const Sample = sequelize.define('Sample', {
 
 sequelize.sync();
 
-app.get('/', (req, res, next) => {
-	res.send('<h1>Hello Sequelize</h1>');
-});
-
 app.get('/write', (req, res, next) => {
 	res.render('write.pug');
 });
@@ -52,14 +48,14 @@ app.get('/write', (req, res, next) => {
 app.post('/save', async (req, res, next) => {
 	try {
 		let result = await Sample.create({ ...req.body });
-		res.json(result);
+		res.redirect('/list');
 	}
 	catch(e) {
 		console.log(e);
 	}
 });
 
-app.get('/list', async (req, res, next) => {
+app.get(['/', '/list'], async (req, res, next) => {
 	try {
 		let result = await Sample.findAll({
 			order: [['id', 'desc']],
@@ -71,4 +67,22 @@ app.get('/list', async (req, res, next) => {
 	catch(e) {
 		console.log(e);
 	}
+});
+
+app.get('/update/:id', async (req, res, next) => {
+	let id = req.params.id;
+	let v = await Sample.findOne({ where: { id } });
+	res.render('update.pug', { v });
+});
+
+app.post('/saveUpdate', async (req, res, next) => {
+	let { id, title, comment, writer } = req.body;
+	let result = await Sample.update({ title, comment, writer }, { where: { id } });
+	res.redirect('/');
+});
+
+app.get('/remove/:id', async (req, res, next) => {
+	let id = req.params.id;
+	let result = await Sample.destroy({ where: { id } });
+	res.redirect('/');
 })

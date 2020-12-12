@@ -1,0 +1,17 @@
+extends ./layout/default.pug
+block content
+	form(method="post" action="/saveUpdate")
+		input(type="hidden" name="id" value=`${v.id}`)
+		div
+			h4 제목: 
+			input(type="text" name='title' value=`${v.title}`)
+		div
+			h4 작성자: 
+			input(type="text" name='writer' value=`${v.writer}`)
+		div
+			h4 내용: 
+			textarea(name="comment" style="width: 100%;")= v.comment
+		div
+			button 수정
+			| &nbsp;
+			button(type="button" onclick="location.href = '/';") 리스트
