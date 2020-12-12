@@ -1,0 +1,14 @@
+extends ./layout/default.pug
+block content
+	form(method="post" action="/save")
+		div
+			h4 제목: 
+			input(type="text" name='title')
+		div
+			h4 작성자: 
+			input(type="text" name='writer')
+		div
+			h4 내용: 
+			textarea(name="comment" style="width: 100%;")
+		div
+			button 저장

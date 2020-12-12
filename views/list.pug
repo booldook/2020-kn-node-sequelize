@@ -1,0 +1,22 @@
+extends ./layout/default.pug
+
+block content
+	table(style="width: 100%; border: 1px solid #eee;")
+		thead
+			tr
+				th 번호
+				th 제목
+				th 작성자
+				th 내용
+				th 관리
+		tbody
+			each v in result
+				tr
+					td(style="padding: 0.5em; border-top: 1px solid #eee; text-align: center;")= v.id
+					td(style="padding: 0.5em; border-top: 1px solid #eee; text-align: center;")= v.title
+					td(style="padding: 0.5em; border-top: 1px solid #eee; text-align: center;")= v.writer
+					td(style="padding: 0.5em; border-top: 1px solid #eee")= v.comment
+					td(style="padding: 0.5em; border-top: 1px solid #eee; text-align: center;")
+						a(href=`/update/${v.id}`) 수정
+						| &nbsp;
+						a(href=`/remove/${v.id}`) 삭제

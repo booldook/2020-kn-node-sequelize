@@ -10,6 +10,9 @@ app.listen(3000, () => {
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 const sequelize = new Sequelize({
 	host: 'localhost',
 	port: 3306,
@@ -42,13 +45,13 @@ app.get('/', (req, res, next) => {
 	res.send('<h1>Hello Sequelize</h1>');
 });
 
-app.get('/create', async (req, res, next) => {
+app.get('/write', (req, res, next) => {
+	res.render('write.pug');
+});
+
+app.post('/save', async (req, res, next) => {
 	try {
-		 let result = await Sample.create({
-			title: '구운몽전',
-			writer: '운몽이',
-			comment: '한여름 나비가...'
-		});
+		let result = await Sample.create({ ...req.body });
 		res.json(result);
 	}
 	catch(e) {
@@ -60,10 +63,10 @@ app.get('/list', async (req, res, next) => {
 	try {
 		let result = await Sample.findAll({
 			order: [['id', 'desc']],
-			offset: 0,
-			limit: 5
+			// offset: 0,
+			// limit: 5
 		});
-		res.json(result);
+		res.render('list', { result });
 	}
 	catch(e) {
 		console.log(e);
